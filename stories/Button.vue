@@ -1,52 +1,66 @@
 <template>
-  <button type="button" :class="classes" @click="onClick" :style="style">{{ label }}</button>
+  <div>
+    <q-btn :class=customClass :label=label :color=color :size=size :flat=flat :outline=outline :rounded=rounded />
+  </div>
 </template>
 
 <script>
-import './button.css';
-import { reactive, computed } from 'vue';
+// eslint-disable-next-line no-unused-vars
+import { Quark, Dark, useQuark, useMeta } from 'quark'
+import { reactive, onMounted } from 'vue'
 
 export default {
-  name: 'my-button',
+  name: 'q-button',
 
   props: {
+    customClass: {
+      type: String,
+      required: false,
+    },
     label: {
       type: String,
       required: true,
     },
-    primary: {
-      type: Boolean,
-      default: false,
+    color: {
+      type: String,
+      validator: function (value) {
+        return ['white', 'primary', 'secondary', 'accent', 'dark', 'positive', 'negative', 'info', 'warning'].indexOf(value) !== -1;
+      },
     },
     size: {
       type: String,
       validator: function (value) {
-        return ['small', 'medium', 'large'].indexOf(value) !== -1;
+        return ['xs', 'sm', 'md', 'lg', 'xl'].indexOf(value) !== -1;
       },
     },
-    backgroundColor: {
-      type: String,
+    flat: {
+      type: Boolean,
+      default: false,
+    },
+    outline: {
+      type: Boolean,
+      default: false,
+    },
+    rounded: {
+      type: Boolean,
+      default: false,
     },
   },
 
   emits: ['click'],
+  setup (props, { emit }) {
+    const $q = useQuark()
+    useMeta({ title: 'Quark Development' })
 
-  setup(props, { emit }) {
+    onMounted(() => {
+      window.$q = $q
+      window.Quark = Quark
+    })
+    
     props = reactive(props);
     return {
-      classes: computed(() => ({
-        'storybook-button': true,
-        'storybook-button--primary': props.primary,
-        'storybook-button--secondary': !props.primary,
-        [`storybook-button--${props.size || 'medium'}`]: true,
-      })),
-      style: computed(() => ({
-        backgroundColor: props.backgroundColor,
-      })),
-      onClick() {
-        emit('click');
-      }
+
     }
-  },
-};
+  }
+}
 </script>
