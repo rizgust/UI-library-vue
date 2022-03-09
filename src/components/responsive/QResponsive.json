@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "docsUrl": "https://v2.quark.dev/vue-components/responsive"
+  },
+
+  "mixins": [ "composables/private/use-ratio" ],
+
+  "slots": {
+    "default": {
+      "extends": "default"
+    }
+  }
+}
